@@ -1,149 +1,148 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
 
 # ============================================================
-# SGI SR. PAPEL - ARCHITECTURE & DESIGN LAYER V2
-# DATA ARCHITECT: BRUNA KAMILLE BRITO FERREIRA
+# SGI SR. PAPEL - OMNICHANNEL WEB APP (UI/UX OTIMIZADA)
 # ============================================================
 
-st.set_page_config(page_title="SGI - Sr. Papel", page_icon="📝", layout="wide")
+st.set_page_config(page_title="Sr. Papel | Hub Web", page_icon="📝", layout="wide", initial_sidebar_state="expanded")
 
-# INTEGRAÇÃO DE DESIGN E ESTILIZAÇÃO VIA INJEÇÃO DE CSS
+# 1. INJEÇÃO DE CSS AVANÇADO (Design mais limpo e moderno)
 st.markdown("""
     <style>
-        /* Paleta de Cores Corporativa */
-        :root {
-            --primary: #0F4C81;
-            --secondary: #F5F7FA;
-            --accent: #D32F2F;
-        }
-        .main-header {
-            background: linear-gradient(135deg, #0F4C81 0%, #1D70B8 100%);
+        .title-box {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             padding: 30px;
-            border-radius: 12px;
+            border-radius: 15px;
             color: white;
             text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .main-header h1 { color: white !important; font-weight: 800; margin-bottom: 5px; }
-        .main-header p { color: #E0F0FF !important; font-size: 16px; margin: 0; }
-        
-        /* Cards Informativos e UI */
-        .product-card {
-            background-color: #F8FAFC;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #E2E8F0;
-            margin-bottom: 15px;
-        }
-        .alert-critical {
-            background-color: #FFEBEE;
-            border-left: 6px solid #D32F2F;
-            padding: 15px;
-            border-radius: 6px;
-            color: #C62828;
-            font-weight: bold;
-        }
+        .title-box h1 { color: white !important; font-weight: 800; font-size: 2.8rem; margin: 0; padding: 0; }
+        .title-box p { color: #E0F2FE !important; font-size: 1.2rem; margin-top: 5px; }
+        .escassez { color: #D32F2F; font-weight: 800; font-size: 1.1rem; }
+        .esgotado { color: #9E9E9E; text-decoration: line-through; }
+        .metric-card { background-color: #F8FAFC; padding: 15px; border-radius: 10px; border: 1px solid #E2E8F0; }
     </style>
 """, unsafe_allow_html=True)
 
-# 1. PERSISTÊNCIA EM MEMÓRIA (VÍNCULO ESTRITO COM O MER/DICIONÁRIO)
+# 2. BANCO DE DADOS EM MEMÓRIA (Simulando a Nuvem)
 if "produtos_db" not in st.session_state:
     st.session_state.produtos_db = pd.DataFrame([
-        {"ID_Produto": 1, "SKU_EAN": "7891011121314", "Nome": "Caneta Stabilo Point 88", "Preco_Varejo": 10.90, "Preco_Atacado": 8.90, "Qtd_Min_Atacado": 12, "Quantidade_Atual": 15, "Ponto_Pedido": 5, "Localizacao": "Corredor A, Prateleira 2"},
-        {"ID_Produto": 2, "SKU_EAN": "7892021222324", "Nome": "Caderno Inteligente A5", "Preco_Varejo": 89.90, "Preco_Atacado": 79.90, "Qtd_Min_Atacado": 5, "Quantidade_Atual": 3, "Ponto_Pedido": 5, "Localizacao": "Balcão Central, Gaveta 1"},
-        {"ID_Produto": 3, "SKU_EAN": "7893031323334", "Nome": "Bobina Térmica 80x40", "Preco_Varejo": 5.19, "Preco_Atacado": 4.19, "Qtd_Min_Atacado": 30, "Quantidade_Atual": 0, "Ponto_Pedido": 10, "Localizacao": "Depósito Fundo, Palete 3"}
+        {"ID_Produto": 1, "SKU_EAN": "789101", "Nome": "Caneta Stabilo Boss", "Preco_Varejo": 10.90, "Preco_Atacado": 8.90, "Qtd_Min_Atacado": 12, "Quantidade_Atual": 15, "Ponto_Pedido": 5},
+        {"ID_Produto": 2, "SKU_EAN": "789202", "Nome": "Caderno Inteligente", "Preco_Varejo": 89.90, "Preco_Atacado": 79.90, "Qtd_Min_Atacado": 5, "Quantidade_Atual": 3, "Ponto_Pedido": 5},
+        {"ID_Produto": 3, "SKU_EAN": "789303", "Nome": "Bobina Térmica", "Preco_Varejo": 5.19, "Preco_Atacado": 4.19, "Qtd_Min_Atacado": 30, "Quantidade_Atual": 0, "Ponto_Pedido": 10},
+        {"ID_Produto": 4, "SKU_EAN": "789404", "Nome": "Post-it Amarelo", "Preco_Varejo": 8.50, "Preco_Atacado": 6.50, "Qtd_Min_Atacado": 10, "Quantidade_Atual": 20, "Ponto_Pedido": 8}
     ])
 
-# 2. CAMADA DE SEGURANÇA E PRIVILÉGIOS (RBAC)
-st.sidebar.image("https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=150", width=100) # Ilustração minimalista de papelaria conceitual
-st.sidebar.markdown("## 🔐 Controle de Acesso (RBAC)")
-perfil = st.sidebar.selectbox(
-    "Selecione o perfil de autenticação:",
-    ["Cliente (Catálogo Omnichannel)", "Funcionário (Módulo de Caixa - PDV)", "Administrador (Dashboard de BI Gerencial)"]
+# 3. MENU LATERAL (RBAC - Role-Based Access Control)
+st.sidebar.markdown("## 🔐 Controle de Acesso")
+perfil = st.sidebar.radio(
+    "Selecione a Visão:",
+    ["🛒 Cliente (Catálogo Web)", "🏪 Caixa (Funcionária)", "📊 Painel BI (Gerência)"]
 )
 
-# ------------------------------------------------------------
-# PERFIL I: CLIENTE (CATÁLOGO OMNICHANNEL)
-# ------------------------------------------------------------
-if perfil == "Cliente (Catálogo Omnichannel)":
-    st.markdown("""
-        <div class='main-header'>
-            <h1>SR. PAPEL</h1>
-            <p>SGI Centralizado — Solução Omnichannel Integrada</p>
-        </div>
-    """, unsafe_allow_html=True)
+# ============================================================
+# TELA 1: CLIENTE (Layout em Grade estilo E-commerce)
+# ============================================================
+if perfil == "🛒 Cliente (Catálogo Web)":
+    st.markdown("<div class='title-box'><h1>Sr. Papel</h1><p>Catálogo Oficial • Atualizado em Tempo Real</p></div>", unsafe_allow_html=True)
     
-    # Hub Unificado de Redirecionamento de Canais (Fim do labirinto As-Is)
+    # Botões de Roteamento (Hub Central)
     c1, c2, c3 = st.columns(3)
-    with c1:
-        st.link_button("📍 Shopping Center Icaraí (Maps)", "https://maps.google.com")
-    with c2:
-        st.link_button("💬 Canal Oficial WhatsApp", "https://wa.me/5521999301300")
-    with c3:
-        st.link_button("👥 Comunidade Papelaria Fofa", "https://chat.whatsapp.com")
-        
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.subheader("📚 Catálogo Interativo de Produtos")
+    c1.link_button("📍 Como Chegar (Icaraí)", "https://maps.google.com", use_container_width=True)
+    c2.link_button("💬 Falar no WhatsApp Oficial", "https://wa.me/5521999301300", use_container_width=True)
+    c3.link_button("✨ Grupo Papelaria Fofa", "https://chat.whatsapp.com", use_container_width=True)
     
+    st.divider()
+    st.subheader("🛍️ Vitrine de Produtos")
+    
+    # Criando um layout de Grid (Grade) real
+    cols = st.columns(3)
     for idx, row in st.session_state.produtos_db.iterrows():
-        with st.container():
-            col1, col2, col3 = st.columns([3, 3, 2])
-            with col1:
+        with cols[idx % 3]:
+            with st.container(border=True): # Borda nativa bonita do Streamlit
                 st.markdown(f"### {row['Nome']}")
-                st.caption(f"EAN/SKU: {row['SKU_EAN']} | Ponto de Segurança: {row['Ponto_Pedido']} un.")
-            with col2:
-                st.write(f"**Varejo (B2C):** R$ {row['Preco_Varejo']:.2f}")
-                st.write(f"**Atacado (B2B):** R$ {row['Preco_Atacado']:.2f} *(A partir de {row['Qtd_Min_Atacado']} un.)*")
-            with col3:
+                st.caption(f"Código: {row['SKU_EAN']}")
+                
+                st.write(f"**Varejo:** R$ {row['Preco_Varejo']:.2f}")
+                st.write(f"**Atacado:** R$ {row['Preco_Atacado']:.2f} *(a partir de {row['Qtd_Min_Atacado']} un)*")
+                
+                # Regras de Negócio e Cores de UI (Escassez e Esgotado)
                 if row["Quantidade_Atual"] == 0:
-                    st.error("❌ Esgotado no Inventário")
+                    st.markdown("<p class='esgotado'>❌ Esgotado</p>", unsafe_allow_html=True)
+                    st.button("Avise-me quando chegar", key=f"btn_{row['ID_Produto']}", use_container_width=True, disabled=True)
                 elif row["Quantidade_Atual"] <= row["Ponto_Pedido"]:
-                    # Aplicação Crítica da Regra Visual de Escassez (#D32F2F)
-                    st.markdown(f"<span style='color:#D32F2F; font-weight:bold;'>🔥 Escassez: Restam apenas {row['Quantidade_Atual']} un!</span>", unsafe_allow_html=True)
-                    st.button("Reservar Item", key=f"btn_{row['ID_Produto']}", use_container_width=True)
+                    st.markdown(f"<p class='escassez'>🔥 Restam só {row['Quantidade_Atual']} unidades!</p>", unsafe_allow_html=True)
+                    st.button("Comprar Agora", key=f"btn_{row['ID_Produto']}", type="primary", use_container_width=True)
                 else:
-                    st.success("✔️ Disponível em Prateleira")
-                    st.button("Adicionar", key=f"btn_{row['ID_Produto']}", use_container_width=True)
-            st.markdown("---")
+                    st.markdown("<p style='color: #2E7D32; font-weight: bold;'>✔ Em Estoque</p>", unsafe_allow_html=True)
+                    st.button("Comprar", key=f"btn_{row['ID_Produto']}", use_container_width=True)
 
-# ------------------------------------------------------------
-# PERFIL II: FUNCIONÁRIO (MÓDULO DE CAIXA / PDV)
-# ------------------------------------------------------------
-elif perfil == "Funcionário (Módulo de Caixa - PDV)":
-    st.markdown("<div class='main-header'><h1>🏪 INTERFACE DO CAIXA (PDV)</h1><p>Operações de Baixa Carga Cognitiva</p></div>", unsafe_allow_html=True)
+# ============================================================
+# TELA 2: CAIXA / PDV (Layout Minimalista "Modo Tio")
+# ============================================================
+elif perfil == "🏪 Caixa (Funcionária)":
+    st.markdown("<div class='title-box'><h1>🏪 PDV Rápido</h1><p>Registro de Saída de Estoque</p></div>", unsafe_allow_html=True)
     
-    sku_input = st.text_input("Bipe o código SKU_EAN do Leitor de Código de Barras:")
-    qtd_input = st.number_input("Quantidade de Itens:", min_value=1, value=1)
-    
-    if st.button("Processar Transação", use_container_width=True):
-        prod_match = st.session_state.produtos_db[st.session_state.produtos_db["SKU_EAN"] == sku_input]
-        if not prod_match.empty:
-            idx = prod_match.index[0]
-            if st.session_state.produtos_db.at[idx, "Quantidade_Atual"] >= qtd_input:
-                st.session_state.produtos_db.at[idx, "Quantidade_Atual"] -= qtd_input
-                st.success("✅ Transação Processada. Abatimento Omnichannel Concluído com Sucesso!")
-                st.rerun()
-            else:
-                st.markdown(f"<div class='alert-critical'>⚠️ Erro de Inventário: Saldo insuficiente. Sistema registra apenas {st.session_state.produtos_db.at[idx, 'Quantidade_Atual']} unidades disponíveis.</div>", unsafe_allow_html=True)
-        else:
-            st.error("❌ Código EAN não localizado na base relacional.")
-
-# ------------------------------------------------------------
-# PERFIL III: ADMINISTRADOR (BI GERENCIAL)
-# ------------------------------------------------------------
-elif perfil == "Administrador (Dashboard de BI Gerencial)":
-    st.markdown("<div class='main-header'><h1>📊 BUSINESS INTELLIGENCE</h1><p>Monitoramento Analítico de Governança</p></div>", unsafe_allow_html=True)
-    
-    m1, m2, m3 = st.columns(3)
-    with m1:
-        st.metric("SKUs Monitorados", len(st.session_state.produtos_db))
-    with m2:
-        st.metric("Rupturas Críticas (Estoque Zerado)", len(st.session_state.produtos_db[st.session_state.produtos_db["Quantidade_Atual"] == 0]))
-    with m3:
-        st.metric("SLA Google Maps (Meta)", "90%", "+90% de Eficiência")
+    # Fast POS / Botões de Venda Rápida
+    st.subheader("⚡ Botões de Venda Rápida")
+    col1, col2, col3, col4 = st.columns(4)
+    if col1.button("🖋️ Vender 1x Caneta Stabilo", use_container_width=True):
+        st.session_state.produtos_db.loc[0, "Quantidade_Atual"] -= 1
+        st.success("Caneta Stabilo vendida! Estoque atualizado na nuvem.")
+    if col2.button("📒 Vender 1x Caderno", use_container_width=True):
+        st.session_state.produtos_db.loc[1, "Quantidade_Atual"] -= 1
+        st.success("Caderno vendido! Estoque atualizado na nuvem.")
         
-    st.markdown("### 📋 Visão em Tempo Real da Base de Dados (Sincronizada)")
-    st.dataframe(st.session_state.produtos_db, use_container_width=True)
+    st.divider()
+    
+    # Leitor de Código de Barras
+    st.subheader("🔎 Busca por Leitor (Bipar)")
+    c1, c2 = st.columns([3, 4])
+    with c1:
+        sku_input = st.text_input("Código SKU/EAN:", placeholder="Ex: 789101", label_visibility="collapsed")
+    with c2:
+        if st.button("Confirmar Baixa", type="primary", use_container_width=True):
+            idx = st.session_state.produtos_db.index[st.session_state.produtos_db["SKU_EAN"] == sku_input].tolist()
+            if idx:
+                if st.session_state.produtos_db.at[idx, "Quantidade_Atual"] > 0:
+                    st.session_state.produtos_db.at[idx, "Quantidade_Atual"] -= 1
+                    st.success("✅ Produto abatido do estoque com sucesso!")
+                else:
+                    st.error("❌ Atenção: Produto já consta como ZERADO no sistema.")
+            else:
+                st.warning("⚠️ Código não encontrado.")
+
+# ============================================================
+# TELA 3: ADMINISTRADOR / BI (Dashboard Visual)
+# ============================================================
+elif perfil == "📊 Painel BI (Gerência)":
+    st.markdown("<div class='title-box'><h1>📊 Dashboard BI</h1><p>Inteligência de Negócio Sr. Papel</p></div>", unsafe_allow_html=True)
+    
+    # Cards de KPI
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("📦 SKUs Ativos", len(st.session_state.produtos_db))
+    m2.metric("🚨 Produtos Esgotados", len(st.session_state.produtos_db[st.session_state.produtos_db["Quantidade_Atual"] == 0]))
+    m3.metric("📱 Cliques no WhatsApp", "142", "+12% hoje")
+    m4.metric("⭐ SLA de Respostas", "100%", "Sem atrasos")
+    
+    st.divider()
+    
+    # Gráfico Visual (Bem melhor que apenas tabela)
+    st.subheader("📉 Nível de Estoque Atual (Curva de Escassez)")
+    chart_data = st.session_state.produtos_db[["Nome", "Quantidade_Atual"]].set_index("Nome")
+    st.bar_chart(chart_data, color="#3B82F6")
+    
+    # Tabela Gerencial (Com cores)
+    st.subheader("📋 Tabela Gerencial de Produtos")
+    st.dataframe(
+        st.session_state.produtos_db,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Preco_Varejo": st.column_config.NumberColumn("Varejo (R$)", format="R$ %.2f"),
+            "Preco_Atacado": st.column_config.NumberColumn("Atacado (R$)", format="R$ %.2f")
+        }
+    )
